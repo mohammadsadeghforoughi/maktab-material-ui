@@ -14,18 +14,10 @@ interface IEmployee {
 function Route1() {
   const [employees, setEmployees] = useState<Array<IEmployee>>();
 
-  const fetchEmployees = () => {
-    axios
-      .get("https://dummy.restapiexample.com/api/v1/employees")
-      .then((res) => {
-        console.log(res.data);
-        setEmployees(res.data.data);
-      })
-      .catch((err) => console.log(err));
-  };
 
   useEffect(() => {
-    fetchEmployees();
+    //@ts-ignore
+    fetchEmployees().then(emps=>setEmployees(emps)).catch(err=>console.log(err));
   }, []);
 
   return (
@@ -51,3 +43,19 @@ function Route1() {
 }
 
 export default Route1;
+
+
+
+
+
+const fetchEmployees = () => {
+  return new Promise((resolve, reject)=>{
+    axios
+    .get("https://dummy.restapiexample.com/api/v1/employees")
+    .then((res) => {
+      resolve(res.data.data)
+     })
+    .catch((err) => reject(err));
+  })
+ 
+};
